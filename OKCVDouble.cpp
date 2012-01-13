@@ -1,8 +1,10 @@
 /*
- * This file is part of the OpenKinect Project. http://www.openkinect.org
+ * This file contains code that is part of the OpenKinect Project.
+ * http://www.openkinect.org
  *
  * Copyright (c) 2010 individual OpenKinect contributors. See the CONTRIB file
  * for details.
+ * Additional code is copyright (c) 2011 Jeff Kramer (jeffkramr@gmail.com).
  *
  * This code is licensed to you under the terms of the Apache License, version
  * 2.0, or, at your option, the terms of the GNU General Public License,
@@ -22,6 +24,8 @@
  *
  * Binary distributions must follow the binary distribution requirements of
  * either License.
+ * 
+ * 
  */
 
 #include <iostream>

@@ -1,3 +1,11 @@
 This code bridges OpenKinect, PCL, and OpenCV in C++.
 
 It also includes some fun tricks, like background subtraction and on the fly multiple Kinect calibration.
+   
+OKCV - OpenKinect and OpenCV bridge.
+OKCVCalib - OpenKinect and OpenCV calibration system.
+OKCVDouble - OpenKinect and OpenCV double Kinect calibration.
+OKFlower - OpenKinect and PCL flipping a bit on an Arduino.
+OKPCLDouble - OpenKinect and PCL double Kinect point clouds.
+OKShutter - OpenKinect and PCL double Kinect with mechanical shutters - stops interference between multiple Kinects
+OKStereo - OpenKinect, OpenCV, and PCL double Kinect automatic calibration and point cloud positioning.
