@@ -12,4 +12,4 @@ OKStereo - OpenKinect, OpenCV, and PCL double Kinect automatic calibration and p
 
 Please note this code requires the qworg branch of libfreenect - it modifies some files to allow for binding between PCL and OpenKinect.
 
-You can find it here: https://github.com/Qworg/libfreenect
+You can find it here: https://github.com/Qworg/libfreenect/tree/unstable
