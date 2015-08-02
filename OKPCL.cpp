@@ -144,7 +144,7 @@ int main (int argc, char** argv)
     viewer->setBackgroundColor (0, 0, 0);
     viewer->addPointCloud<pcl::PointXYZRGB> (cloud, "Kinect Cloud");
     viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,1, "Kinect Cloud");
-    viewer->addCoordinateSystem (1.0);
+    viewer->addCoordinateSystem (1.0, 0);
     viewer->initCameraParameters ();
 
     device = &freenect.createDevice<MyFreenectDevice>(0);
@@ -180,7 +180,7 @@ int main (int argc, char** argv)
             for ( size_t u=0 ; u<640 ; u++, i++)
             {
                 iRealDepth = mdepth[i];
-                freenect_camera_to_world(device->getDevice(), u, v, iRealDepth, &x, &y);
+                freenect_camera_to_world(device->getDevicePtr(), u, v, iRealDepth, &x, &y);
                 cloud->points[i].x = x;
                 cloud->points[i].y = y;
                 cloud->points[i].z = iRealDepth;

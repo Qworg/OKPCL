@@ -251,7 +251,7 @@ int main (int argc, char** argv)
   	viewer->addPointCloud<pcl::PointXYZRGB> (cloud2, "Second Cloud");
   	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Kinect Cloud");
   	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Second Cloud");
-  	viewer->addCoordinateSystem (1.0);
+  	viewer->addCoordinateSystem (1.0, 0);
 	viewer->initCameraParameters ();
 	
 	//Voxelizer Setup
@@ -311,8 +311,8 @@ int main (int argc, char** argv)
        			//DepthCount+=iRealDepth;
 				//printf("fRealDepth = %f\n",fRealDepth);
 				//fflush(stdout);
-				freenect_camera_to_world(device->getDevice(), u, v, iRealDepth, &x, &y);
-				freenect_camera_to_world(devicetwo->getDevice(), u, v, iTDepth, &tx, &ty);				
+				freenect_camera_to_world(device->getDevicePtr(), u, v, iRealDepth, &x, &y);
+				freenect_camera_to_world(devicetwo->getDevicePtr(), u, v, iTDepth, &tx, &ty);				
 				cloud->points[i].x  = x;//1000.0;
 				cloud->points[i].y  = y;//1000.0;
         	    cloud->points[i].z = iRealDepth;//1000.0;

@@ -57,10 +57,10 @@
 using namespace cv;
 using namespace std; 
 
-///Mutex Class
-class Mutex {
+///OKCVMutex Class
+class OKCVMutex {
 public:
-	Mutex() {
+	OKCVMutex() {
 		pthread_mutex_init( &m_mutex, NULL );
 	}
 	void lock() {
@@ -72,9 +72,9 @@ public:
 
 	class ScopedLock
 	{
-		Mutex & _mutex;
+		OKCVMutex & _mutex;
 	public:
-		ScopedLock(Mutex & mutex)
+		ScopedLock(OKCVMutex & mutex)
 			: _mutex(mutex)
 		{
 			_mutex.lock();
@@ -101,14 +101,14 @@ public:
 	//~MyFreenectDevice(){}
 	// Do not call directly even in child
 	void VideoCallback(void* _rgb, uint32_t timestamp) {
-		Mutex::ScopedLock lock(m_rgb_mutex);
+		OKCVMutex::ScopedLock lock(m_rgb_mutex);
 		uint8_t* rgb = static_cast<uint8_t*>(_rgb);
 		std::copy(rgb, rgb+getVideoBufferSize(), m_buffer_video.begin());
 		m_new_rgb_frame = true;
 	};
 	// Do not call directly even in child
 	void DepthCallback(void* _depth, uint32_t timestamp) {
-		Mutex::ScopedLock lock(m_depth_mutex);
+		OKCVMutex::ScopedLock lock(m_depth_mutex);
 		depth.clear();
 		uint16_t* call_depth = static_cast<uint16_t*>(_depth);
 		for (size_t i = 0; i < 640*480 ; i++) {
@@ -117,7 +117,7 @@ public:
 		m_new_depth_frame = true;
 	}
 	bool getRGB(std::vector<uint8_t> &buffer) {
-		Mutex::ScopedLock lock(m_rgb_mutex);
+		OKCVMutex::ScopedLock lock(m_rgb_mutex);
 		if (!m_new_rgb_frame)
 			return false;
 		buffer.swap(m_buffer_video);
@@ -126,7 +126,7 @@ public:
 	}
 
 	bool getDepth(std::vector<uint16_t> &buffer) {
-		Mutex::ScopedLock lock(m_depth_mutex);
+		OKCVMutex::ScopedLock lock(m_depth_mutex);
 		if (!m_new_depth_frame)
 			return false;
 		buffer.swap(depth);
@@ -137,8 +137,8 @@ public:
 private:
 	std::vector<uint16_t> depth;
 	std::vector<uint8_t> m_buffer_video;
-	Mutex m_rgb_mutex;
-	Mutex m_depth_mutex;
+	OKCVMutex m_rgb_mutex;
+	OKCVMutex m_depth_mutex;
 	bool m_new_rgb_frame;
 	bool m_new_depth_frame;
 };
@@ -249,7 +249,7 @@ int main (int argc, char** argv)
   	viewer->addPointCloud<pcl::PointXYZRGB> (cloud2, "Second Cloud");
   	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Kinect Cloud");
   	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Second Cloud");
-  	viewer->addCoordinateSystem (1.0);
+  	viewer->addCoordinateSystem (1.0, 0);
 	viewer->initCameraParameters ();
 	
 	printf("Create the devices.\n");
@@ -309,8 +309,8 @@ int main (int argc, char** argv)
         		if (iRealDepth == 0) mZeros++;
         		iTDepth = tdepth[i];
         		if (iTDepth == 0) tZeros++;
-				freenect_camera_to_world(device->getDevice(), u, v, iRealDepth, &x, &y);
-				freenect_camera_to_world(devicetwo->getDevice(), u, v, iTDepth, &tx, &ty);
+				freenect_camera_to_world(device->getDevicePtr(), u, v, iRealDepth, &x, &y);
+				freenect_camera_to_world(devicetwo->getDevicePtr(), u, v, iTDepth, &tx, &ty);
 				
 				cloud->points[i].x  = x;//1000.0;
 				cloud->points[i].y  = y;//1000.0;

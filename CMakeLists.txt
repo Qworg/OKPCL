@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 set(CMAKE_C_FLAGS "-Wall")
+include_directories(${LIBUSB_1_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/serial)
+
+if(WIN32)
+  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows")
+  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/libusb10emu/libusb-1.0")
+endif()
 
 project(OKPCL)
-find_package(PCL 1.6 REQUIRED)
+find_package(PCL 1.7 REQUIRED)
 
 if (WIN32)
   set(THREADS_USE_PTHREADS_WIN32 true)
@@ -62,7 +69,7 @@ endif()
 
 project(OKCV)
 
-find_package(OPENCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
 if (WIN32)
   set(THREADS_USE_PTHREADS_WIN32 true)
@@ -93,7 +100,7 @@ endif()
 
 project(OKCVDouble)
 
-find_package(OPENCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
 if (WIN32)
   set(THREADS_USE_PTHREADS_WIN32 true)
@@ -124,7 +131,7 @@ endif()
 
 project(OKStereo)
 
-find_package(OPENCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
 if (WIN32)
   set(THREADS_USE_PTHREADS_WIN32 true)
@@ -155,7 +162,7 @@ endif()
 
 project(OKShutter)
 
-find_package(OPENCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
 if (WIN32)
   set(THREADS_USE_PTHREADS_WIN32 true)
@@ -197,7 +204,7 @@ include_directories(. ${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-add_executable(OKFlower OKFlower.cpp AsyncSerial.cpp BufferedAsyncSerial.cpp)
+add_executable(OKFlower OKFlower.cpp ./serial/AsyncSerial.cpp ./serial/BufferedAsyncSerial.cpp)
 
 if(APPLE)
   target_link_libraries(OKFlower freenect ${PCL_LIBRARIES})

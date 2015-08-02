@@ -1,63 +1,10 @@
-commit 752e2f2476a99d640f6d56ae8d4aad60ce273cc2
-Author: Drew Fisher <drew.m.fisher@gmail.com>
-Date:   Tue Mar 15 23:46:52 2011 -0700
+For a list of libfreenect authors, please see the Git history of the project,
+such as with 'git log'. This file will contain a list of authors on release
+snapshots of libfreenect.
 
-    API rework, round 2.
-    
-    Bindings still probably broken: Python, Java, AS3, C#, Matlab, Ruby
-    
-    Signed-off-by: Drew Fisher <drew.m.fisher@gmail.com> (zarvox)
-
-commit f36cfdab1663810c4b2a2e79d61f680d5aa03c79
-Author: Drew Fisher <drew.m.fisher@gmail.com>
-Date:   Fri Feb 11 23:40:36 2011 -0800
-
-    Fix up fakenect and the cpp wrapper to build and run as before after API change.
-    
-    Signed-off-by: Drew Fisher <drew.m.fisher@gmail.com>
-
-commit 087402b127b12edd01f4a7c1e9deb6f77c7b636f
-Author: David García Garzón <david.garcia@barcelonamedia.org>
-Date:   Thu Feb 3 21:58:21 2011 +0100
-
-    Using scoped locks in cpp wrapper
-    
-    I added scoped locks to the Mutex class which use the RIIA idiom
-    to ensure that any lock is unlocked whatever the control path you
-    take. This enables the simplification of some methods by doing
-    early exists.
-    
-    Signed-off-by: David García Garzón <david.garcia@barcelonamedia.org>
-
-commit 34af2b61594871641fe71094d56bae112db6d5f4
-Author: David García Garzón <david.garcia@barcelonamedia.org>
-Date:   Tue Dec 21 20:05:55 2010 +0100
-
-    Allow devices with different callbacks
-    
-    Simplification of the c++ interface by making the context not being
-    a template and by templating just the creation method.
-    Besides the simplification of removing templated objects, this allows
-    the context to hold devices of different types (with different callbacks).
-    
-    Signed-off-by: David García Garzón <david.garcia@barcelonamedia.org>
-
-commit a7db0d89734c4ff6ce5068ff94ab1f418fcc87b2
-Author: Kyle Machulis <kyle@nonpolynomial.com>
-Date:   Sat Dec 18 15:55:03 2010 -0800
-
-    Fixed LED blink enum since blink yellow actually blinks green
-    Fixed LED color enum in cppview
-    Updated blink enum names in glview
-    Added comment changes recommended by Drew Fisher (zarvox)
-    
-    Signed-off-by: Kyle Machulis <kyle@nonpolynomial.com>
-
-commit 32a809371019e4c18251546933c346eb96a7fae5
-Author: Kyle Machulis <kyle@nonpolynomial.com>
-Date:   Sat Dec 18 16:02:11 2010 -0800
-
-    Moved cppview example to cpp wrapper
-    Moved compilation of cppview into cpp wrapper CMake
-    
-    Signed-off-by: Kyle Machulis <kyle@nonpolynomial.com>
+THIS FILE IS NOT VALID FOR NON-GIT DISTRIBUTIONS. If you wish to redistribute
+libfreenect source code outside of the Git infrastructure, you MUST either use
+a release version or generate a complete CONTRIB file valid for the source Git
+revision tree that you use for your distribution. Redistributions of libfreenect
+source code without a valid CONTRIB file and without Git metadata are not
+compliant with the license.

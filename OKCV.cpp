@@ -29,7 +29,8 @@
  */
 
 #include <iostream>
-#include <libfreenect.hpp>
+#include <libfreenect/libfreenect.hpp>
+#include <libfreenect/libfreenect_registration.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <string.h>
@@ -47,9 +48,9 @@ using namespace cv;
 using namespace std; 
 
 ///Mutex Class
-class Mutex {
+class Mtx {
 public:
-	Mutex() {
+	Mtx() {
 		pthread_mutex_init( &m_mutex, NULL );
 	}
 	void lock() {
@@ -61,9 +62,9 @@ public:
 
 	class ScopedLock
 	{
-		Mutex & _mutex;
+		Mtx & _mutex;
 	public:
-		ScopedLock(Mutex & mutex)
+		ScopedLock(Mtx & mutex)
 			: _mutex(mutex)
 		{
 			_mutex.lock();
@@ -90,14 +91,14 @@ public:
 	//~MyFreenectDevice(){}
 	// Do not call directly even in child
 	void VideoCallback(void* _rgb, uint32_t timestamp) {
-		Mutex::ScopedLock lock(m_rgb_mutex);
+		Mtx::ScopedLock lock(m_rgb_mutex);
 		uint8_t* rgb = static_cast<uint8_t*>(_rgb);
 		std::copy(rgb, rgb+getVideoBufferSize(), m_buffer_video.begin());
 		m_new_rgb_frame = true;
 	};
 	// Do not call directly even in child
 	void DepthCallback(void* _depth, uint32_t timestamp) {
-		Mutex::ScopedLock lock(m_depth_mutex);
+		Mtx::ScopedLock lock(m_depth_mutex);
 		depth.clear();
 		uint16_t* call_depth = static_cast<uint16_t*>(_depth);
 		for (size_t i = 0; i < 640*480 ; i++) {
@@ -107,7 +108,7 @@ public:
 	}
 	bool getRGB(std::vector<uint8_t> &buffer) {
 		//printf("Getting RGB!\n");
-		Mutex::ScopedLock lock(m_rgb_mutex);
+		Mtx::ScopedLock lock(m_rgb_mutex);
 		if (!m_new_rgb_frame) {
 			//printf("No new RGB Frame.\n");
 			return false;
@@ -118,7 +119,7 @@ public:
 	}
 
 	bool getDepth(std::vector<uint16_t> &buffer) {
-		Mutex::ScopedLock lock(m_depth_mutex);
+		Mtx::ScopedLock lock(m_depth_mutex);
 		if (!m_new_depth_frame)
 			return false;
 		buffer.swap(depth);
@@ -129,8 +130,8 @@ public:
 private:
 	std::vector<uint16_t> depth;
 	std::vector<uint8_t> m_buffer_video;
-	Mutex m_rgb_mutex;
-	Mutex m_depth_mutex;
+	Mtx m_rgb_mutex;
+	Mtx m_depth_mutex;
 	bool m_new_rgb_frame;
 	bool m_new_depth_frame;
 };
@@ -150,22 +151,22 @@ int user_data = 0;
 
 
 //OpenCV
-Mat mCorners;
-Mat mOut;
-Mat mGray;
-Size boardSize(10,7); //interior number of corners
-Size imageSize;
+cv::Mat mCorners;
+cv::Mat mOut;
+cv::Mat mGray;
+cv::Size boardSize(10,7); //interior number of corners
+cv::Size imageSize;
 float squareSize = 0.023; //23 mm
-Mat cameraMatrix, distCoeffs;
-vector<vector<Point2f> > imagePoints;
-vector<Point2f> pointbuf;
+cv::Mat cameraMatrix, distCoeffs;
+vector<vector<cv::Point2f> > imagePoints;
+vector<cv::Point2f> pointbuf;
 float aspectRatio = 1.0f;
-vector<Mat> rvecs, tvecs;
+vector<cv::Mat> rvecs, tvecs;
 vector<float> reprojErrs;
-Mat map1, map2;
-Mat mCalib;
+cv::Mat map1, map2;
+cv::Mat mCalib;
 
-static void calcChessboardCorners(Size boardSize, float squareSize, vector<Point3f>& corners)
+static void calcChessboardCorners(cv::Size boardSize, float squareSize, vector<cv::Point3f>& corners)
 {
     corners.resize(0);
     for( int i = 0; i < boardSize.height; i++ )
@@ -291,7 +292,7 @@ int main (int argc, char** argv)
        		{
        			//pcl::PointXYZRGB result;
 	       		iRealDepth = kdepth[i];
-    			freenect_camera_to_world(device->getDevice(), u, v, iRealDepth, &x, &y);
+    			freenect_camera_to_world(device->getDevicePtr(), u, v, iRealDepth, &x, &y);
     			rowDPtr[u] = iRealDepth;
     			rowRPtr[(cinput*3)] = krgb[(i*3)+2];
     			rowRPtr[(cinput*3)+1] = krgb[(i*3)+1];
